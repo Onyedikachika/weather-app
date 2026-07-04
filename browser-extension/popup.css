@@ -7,6 +7,53 @@ body {
   width: 320px;
   font-family: "Segoe UI", "Arial", sans-serif;
   background: skyblue;
+  transition: background 0.8s ease;
+}
+
+body.bg-day-sunny {
+  background: linear-gradient(to bottom, #4facfe, #fceabb);
+}
+
+body.bg-night-sunny,
+body.bg-night-clear {
+  background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+}
+
+body.bg-day-cloudy {
+  background: linear-gradient(to bottom, #757f9a, #d7dde8);
+}
+
+body.bg-night-cloudy {
+  background: linear-gradient(to bottom, #232526, #414345);
+}
+
+body.bg-day-rainy {
+  background: linear-gradient(to bottom, #4b6cb7, #182848);
+}
+
+body.bg-night-rainy {
+  background: linear-gradient(to bottom, #0f2027, #16222a, #3a4a5a);
+}
+
+body.bg-day-stormy,
+body.bg-night-stormy {
+  background: linear-gradient(to bottom, #232526, #0f2027);
+}
+
+body.bg-day-snowy {
+  background: linear-gradient(to bottom, #83a4d4, #e6f0fa);
+}
+
+body.bg-night-snowy {
+  background: linear-gradient(to bottom, #33415c, #99a8c2);
+}
+
+body.bg-day-windy {
+  background: linear-gradient(to bottom, #4ca1af, #c4e0e5);
+}
+
+body.bg-night-windy {
+  background: linear-gradient(to bottom, #232526, #2c5364);
 }
 
 #root {
@@ -66,6 +113,26 @@ body {
 }
 
 .error-banner.hidden {
+  display: none;
+}
+
+.clocks {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.city-time {
+  font-size: 11px;
+  font-weight: bold;
+  color: #2c3e50;
+  background: rgba(255, 255, 255, 0.75);
+  padding: 3px 10px;
+  border-radius: 10px;
+}
+
+.city-time.hidden {
   display: none;
 }
 
@@ -155,4 +222,11 @@ body {
 .forecast-day .day-desc {
   font-size: 9px;
   color: #555;
+}
+
+/* Lighten text that sits directly on the body background (not on a card) for night gradients */
+body[class^="bg-night"] .temperature,
+body[class^="bg-night"] .description,
+body[class^="bg-night"] .details-grid {
+  color: #f0f4f8;
 }

@@ -14,8 +14,13 @@ const humidityEl = document.getElementById("humidity");
 const windSpeedEl = document.getElementById("wind-speed");
 const pressureEl = document.getElementById("pressure");
 const forecastContainer = document.getElementById("forecast-container");
+const deviceClockCanvas = document.getElementById("device-clock-canvas");
+const cityTimeEl = document.getElementById("city-time");
 
 const COORDS_PATTERN = /^-?\d+\.?\d*,-?\d+\.?\d*$/;
+
+let cityTimezoneOffsetSeconds = null;
+let cityName = null;
 
 function buildUrl(base, location) {
   if (COORDS_PATTERN.test(location)) {
@@ -80,6 +85,14 @@ function updateWeatherDisplay(data) {
   pressureEl.textContent = `Pressure: ${data.main.pressure} hPa`;
 
   loadWeatherIcon(data.weather[0].icon);
+
+  cityTimezoneOffsetSeconds = data.timezone;
+  cityName = data.name || locationInput.value.trim();
+  cityTimeEl.classList.remove("hidden");
+  updateCityTime();
+
+  const isDay = !data.weather[0].icon.endsWith("n");
+  applyBackground(data.weather[0].main, windSpeedMs * 3.6, isDay);
 }
 
 function loadWeatherIcon(iconCode) {
@@ -124,7 +137,95 @@ function createForecastItem(day, temp, description, iconCode) {
   return item;
 }
 
+function drawHand(ctx, angle, length, width, color) {
+  ctx.beginPath();
+  ctx.lineWidth = width;
+  ctx.lineCap = "round";
+  ctx.strokeStyle = color;
+  ctx.moveTo(0, 0);
+  ctx.lineTo(length * Math.sin(angle), -length * Math.cos(angle));
+  ctx.stroke();
+}
+
+function drawDeviceClock() {
+  const ctx = deviceClockCanvas.getContext("2d");
+  const size = deviceClockCanvas.width;
+  const radius = size / 2;
+  const now = new Date();
+
+  ctx.clearRect(0, 0, size, size);
+  ctx.save();
+  ctx.translate(radius, radius);
+
+  ctx.beginPath();
+  ctx.arc(0, 0, radius - 4, 0, 2 * Math.PI);
+  ctx.fillStyle = "rgba(255, 255, 255, 0.9)";
+  ctx.fill();
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = "#2c3e50";
+  ctx.stroke();
+
+  for (let i = 0; i < 12; i++) {
+    const angle = (i * Math.PI) / 6;
+    const isMajor = i % 3 === 0;
+    const outerR = radius - 6;
+    const innerR = isMajor ? radius - 16 : radius - 12;
+    ctx.beginPath();
+    ctx.moveTo(outerR * Math.sin(angle), -outerR * Math.cos(angle));
+    ctx.lineTo(innerR * Math.sin(angle), -innerR * Math.cos(angle));
+    ctx.lineWidth = isMajor ? 3 : 1.5;
+    ctx.strokeStyle = "#2c3e50";
+    ctx.stroke();
+  }
+
+  const hours = now.getHours() % 12;
+  const minutes = now.getMinutes();
+  const seconds = now.getSeconds();
+
+  drawHand(ctx, ((hours + minutes / 60) * Math.PI) / 6, radius * 0.5, 5, "#2c3e50");
+  drawHand(ctx, ((minutes + seconds / 60) * Math.PI) / 30, radius * 0.72, 3, "#2c3e50");
+  drawHand(ctx, (seconds * Math.PI) / 30, radius * 0.8, 1.5, "#e74c3c");
+
+  ctx.beginPath();
+  ctx.arc(0, 0, 4, 0, 2 * Math.PI);
+  ctx.fillStyle = "#2c3e50";
+  ctx.fill();
+
+  ctx.restore();
+}
+
+function updateCityTime() {
+  if (cityTimezoneOffsetSeconds === null) return;
+  const cityDate = new Date(Date.now() + cityTimezoneOffsetSeconds * 1000);
+  const hours = cityDate.getUTCHours();
+  const minutes = cityDate.getUTCMinutes();
+  const seconds = cityDate.getUTCSeconds();
+  const period = hours >= 12 ? "PM" : "AM";
+  const hour12 = hours % 12 === 0 ? 12 : hours % 12;
+  const pad = (n) => String(n).padStart(2, "0");
+  cityTimeEl.textContent = `Local time in ${cityName}: ${hour12}:${pad(minutes)}:${pad(seconds)} ${period}`;
+}
+
+function classifyCondition(main, windKmh) {
+  const m = main.toLowerCase();
+  if (m === "thunderstorm" || m === "tornado") return "stormy";
+  if (m === "snow") return "snowy";
+  if (m === "rain" || m === "drizzle") return "rainy";
+  if (windKmh > 30) return "windy";
+  if (m === "clear") return "sunny";
+  return "cloudy";
+}
+
+function applyBackground(main, windKmh, isDay) {
+  const condition = classifyCondition(main, windKmh);
+  document.body.className = `bg-${isDay ? "day" : "night"}-${condition}`;
+}
+
 searchBtn.addEventListener("click", fetchWeatherData);
 locationInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter") fetchWeatherData();
 });
+
+drawDeviceClock();
+setInterval(drawDeviceClock, 1000);
+setInterval(updateCityTime, 1000);

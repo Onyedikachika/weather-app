@@ -12,10 +12,18 @@
       <h1>Weather App</h1>
       <div class="search-box">
         <input id="location-input" type="text" placeholder="Enter city name or coordinates (lat,lon)" />
-        <button id="search-btn">Get Weather</button>
+        <button id="search-btn" type="button">Get Weather</button>
       </div>
       <p id="error-banner" class="error-banner hidden"></p>
     </header>
+
+    <section class="clocks">
+      <div class="device-clock">
+        <canvas id="device-clock-canvas" width="140" height="140"></canvas>
+        <span class="clock-label">Your time</span>
+      </div>
+      <div id="city-time" class="city-time hidden"></div>
+    </section>
 
     <section class="current-weather">
       <div class="main-weather">

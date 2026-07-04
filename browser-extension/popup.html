@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Weather App</title>
 <link rel="stylesheet" href="popup.css" />
 </head>
@@ -9,9 +10,14 @@
   <div id="root">
     <div class="search-box">
       <input id="location-input" type="text" placeholder="City or lat,lon" />
-      <button id="search-btn">Get</button>
+      <button id="search-btn" type="button">Get</button>
     </div>
     <p id="error-banner" class="error-banner hidden"></p>
+
+    <section class="clocks">
+      <canvas id="device-clock-canvas" width="80" height="80"></canvas>
+      <div id="city-time" class="city-time hidden"></div>
+    </section>
 
     <section class="current-weather">
       <div class="main-weather">

@@ -1,16 +1,22 @@
 package weatherapp;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -23,7 +29,10 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.CompletableFuture;
 
@@ -35,6 +44,7 @@ public class WeatherApp extends Application {
     private static final String ICON_BASE_URL = "http://openweathermap.org/img/wn/";
 
     private TextField locationField;
+    private Label titleLabel;
     private Label temperatureLabel;
     private Label descriptionLabel;
     private Label humidityLabel;
@@ -43,7 +53,14 @@ public class WeatherApp extends Application {
     private Label feelsLikeLabel;
     private ImageView weatherIcon;
     private HBox forecastContainer;
+    private Label forecastTitleLabel;
     private VBox root;
+
+    private Canvas deviceClockCanvas;
+    private Label clockLabel;
+    private Label cityTimeLabel;
+    private Integer cityTimezoneOffsetSeconds;
+    private String cityDisplayName;
 
     @Override
     public void start(Stage primaryStage) {
@@ -55,6 +72,7 @@ public class WeatherApp extends Application {
 
         // Create UI components
         createHeaderSection();
+        createClockSection();
         createCurrentWeatherSection();
         createForecastSection();
 
@@ -70,11 +88,19 @@ public class WeatherApp extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        applyBackground();
+        root.setStyle("-fx-background-color: skyblue;");
+
+        drawDeviceClock();
+        Timeline clockTimeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
+            drawDeviceClock();
+            updateCityTimeLabel();
+        }));
+        clockTimeline.setCycleCount(Timeline.INDEFINITE);
+        clockTimeline.play();
     }
 
     private void createHeaderSection() {
-        Label titleLabel = new Label("Weather App");
+        titleLabel = new Label("Weather App");
         titleLabel.setStyle("-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
 
         locationField = new TextField();
@@ -98,6 +124,29 @@ public class WeatherApp extends Application {
         headerBox.getChildren().addAll(titleLabel, searchBox);
 
         root.getChildren().add(headerBox);
+    }
+
+    private void createClockSection() {
+        deviceClockCanvas = new Canvas(140, 140);
+
+        clockLabel = new Label("Your time");
+        clockLabel.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #34495e;");
+
+        VBox deviceClockBox = new VBox(4);
+        deviceClockBox.setAlignment(Pos.CENTER);
+        deviceClockBox.getChildren().addAll(deviceClockCanvas, clockLabel);
+
+        cityTimeLabel = new Label();
+        cityTimeLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2c3e50; " +
+                "-fx-background-color: rgba(255,255,255,0.7); -fx-padding: 6px 14px; -fx-background-radius: 14px;");
+        cityTimeLabel.setVisible(false);
+        cityTimeLabel.setManaged(false);
+
+        VBox clockSection = new VBox(8);
+        clockSection.setAlignment(Pos.CENTER);
+        clockSection.getChildren().addAll(deviceClockBox, cityTimeLabel);
+
+        root.getChildren().add(clockSection);
     }
 
     private void createCurrentWeatherSection() {
@@ -152,8 +201,8 @@ public class WeatherApp extends Application {
     }
 
     private void createForecastSection() {
-        Label forecastTitle = new Label("5-Day Forecast");
-        forecastTitle.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
+        forecastTitleLabel = new Label("5-Day Forecast");
+        forecastTitleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
 
         forecastContainer = new HBox(15);
         forecastContainer.setAlignment(Pos.CENTER);
@@ -166,7 +215,7 @@ public class WeatherApp extends Application {
 
         VBox forecastSection = new VBox(10);
         forecastSection.setAlignment(Pos.CENTER);
-        forecastSection.getChildren().addAll(forecastTitle, forecastScroll);
+        forecastSection.getChildren().addAll(forecastTitleLabel, forecastScroll);
 
         root.getChildren().add(forecastSection);
     }
@@ -278,6 +327,16 @@ public class WeatherApp extends Application {
             // Weather icon
             String iconCode = data.getJSONArray("weather").getJSONObject(0).getString("icon");
             loadWeatherIcon(iconCode);
+
+            cityTimezoneOffsetSeconds = data.optInt("timezone", 0);
+            cityDisplayName = data.optString("name", locationField.getText().trim());
+            cityTimeLabel.setVisible(true);
+            cityTimeLabel.setManaged(true);
+            updateCityTimeLabel();
+
+            String conditionMain = data.getJSONArray("weather").getJSONObject(0).getString("main");
+            boolean isDay = !iconCode.endsWith("n");
+            applyBackground(conditionMain, windSpeedKmh, isDay);
 
         } catch (Exception e) {
             showAlert("Error", "Failed to parse weather data: " + e.getMessage());
@@ -405,8 +464,126 @@ public class WeatherApp extends Application {
         }
     }
 
-    private void applyBackground() {
-        root.setStyle("-fx-background-color: skyblue;");
+    private void drawDeviceClock() {
+        GraphicsContext gc = deviceClockCanvas.getGraphicsContext2D();
+        double size = deviceClockCanvas.getWidth();
+        double radius = size / 2;
+        LocalTime now = LocalTime.now();
+
+        gc.clearRect(0, 0, size, size);
+        gc.save();
+        gc.translate(radius, radius);
+
+        gc.setFill(Color.rgb(255, 255, 255, 0.9));
+        gc.fillOval(-(radius - 4), -(radius - 4), (radius - 4) * 2, (radius - 4) * 2);
+        gc.setStroke(Color.web("#2c3e50"));
+        gc.setLineWidth(3);
+        gc.strokeOval(-(radius - 4), -(radius - 4), (radius - 4) * 2, (radius - 4) * 2);
+
+        for (int i = 0; i < 12; i++) {
+            double angle = (i * Math.PI) / 6;
+            boolean isMajor = i % 3 == 0;
+            double outerR = radius - 6;
+            double innerR = isMajor ? radius - 16 : radius - 12;
+            gc.setLineWidth(isMajor ? 3 : 1.5);
+            gc.setStroke(Color.web("#2c3e50"));
+            gc.strokeLine(outerR * Math.sin(angle), -outerR * Math.cos(angle),
+                    innerR * Math.sin(angle), -innerR * Math.cos(angle));
+        }
+
+        int hours = now.getHour() % 12;
+        int minutes = now.getMinute();
+        int seconds = now.getSecond();
+
+        drawHand(gc, ((hours + minutes / 60.0) * Math.PI) / 6, radius * 0.5, 5, "#2c3e50");
+        drawHand(gc, ((minutes + seconds / 60.0) * Math.PI) / 30, radius * 0.72, 3, "#2c3e50");
+        drawHand(gc, (seconds * Math.PI) / 30, radius * 0.8, 1.5, "#e74c3c");
+
+        gc.setFill(Color.web("#2c3e50"));
+        gc.fillOval(-4, -4, 8, 8);
+
+        gc.restore();
+    }
+
+    private void drawHand(GraphicsContext gc, double angle, double length, double width, String color) {
+        gc.setLineWidth(width);
+        gc.setStroke(Color.web(color));
+        gc.strokeLine(0, 0, length * Math.sin(angle), -length * Math.cos(angle));
+    }
+
+    private void updateCityTimeLabel() {
+        if (cityTimezoneOffsetSeconds == null) {
+            return;
+        }
+        OffsetDateTime cityTime = OffsetDateTime.now(ZoneOffset.ofTotalSeconds(cityTimezoneOffsetSeconds));
+        String formatted = cityTime.format(DateTimeFormatter.ofPattern("h:mm:ss a"));
+        cityTimeLabel.setText("Local time in " + cityDisplayName + ": " + formatted);
+    }
+
+    private String classifyCondition(String main, double windKmh) {
+        String m = main.toLowerCase();
+        if (m.equals("thunderstorm") || m.equals("tornado")) {
+            return "stormy";
+        }
+        if (m.equals("snow")) {
+            return "snowy";
+        }
+        if (m.equals("rain") || m.equals("drizzle")) {
+            return "rainy";
+        }
+        if (windKmh > 30) {
+            return "windy";
+        }
+        if (m.equals("clear")) {
+            return "sunny";
+        }
+        return "cloudy";
+    }
+
+    private String backgroundGradient(boolean isDay, String condition) {
+        if (!isDay) {
+            switch (condition) {
+                case "sunny": return "linear-gradient(to bottom, #0f2027, #203a43, #2c5364)";
+                case "rainy": return "linear-gradient(to bottom, #0f2027, #16222a, #3a4a5a)";
+                case "snowy": return "linear-gradient(to bottom, #33415c, #99a8c2)";
+                case "stormy": return "linear-gradient(to bottom, #232526, #0f2027)";
+                case "windy": return "linear-gradient(to bottom, #232526, #2c5364)";
+                default: return "linear-gradient(to bottom, #232526, #414345)";
+            }
+        }
+        switch (condition) {
+            case "sunny": return "linear-gradient(to bottom, #4facfe, #fceabb)";
+            case "rainy": return "linear-gradient(to bottom, #4b6cb7, #182848)";
+            case "snowy": return "linear-gradient(to bottom, #83a4d4, #e6f0fa)";
+            case "stormy": return "linear-gradient(to bottom, #232526, #0f2027)";
+            case "windy": return "linear-gradient(to bottom, #4ca1af, #c4e0e5)";
+            default: return "linear-gradient(to bottom, #757f9a, #d7dde8)";
+        }
+    }
+
+    private void applyBackground(String main, double windKmh, boolean isDay) {
+        String condition = classifyCondition(main, windKmh);
+        root.setStyle("-fx-background-color: " + backgroundGradient(isDay, condition) + ";");
+        updateTextContrast(!isDay);
+    }
+
+    private void updateTextContrast(boolean light) {
+        String primary = light ? "#f0f4f8" : "#2c3e50";
+        String secondary = light ? "#dfe6ec" : "#7f8c8d";
+        String tertiary = light ? "#e8edf2" : "#34495e";
+
+        titleLabel.setStyle("-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: " + primary + ";");
+        temperatureLabel.setStyle("-fx-font-size: 48px; -fx-font-weight: bold; -fx-text-fill: " + primary + ";");
+        descriptionLabel.setStyle("-fx-font-size: 18px; -fx-text-fill: " + secondary + ";");
+
+        String detailStyle = "-fx-font-size: 14px; -fx-text-fill: " + tertiary + "; -fx-padding: 5px;";
+        feelsLikeLabel.setStyle(detailStyle);
+        humidityLabel.setStyle(detailStyle);
+        windSpeedLabel.setStyle(detailStyle);
+        pressureLabel.setStyle(detailStyle);
+
+        forecastTitleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: " + primary + ";");
+        clockLabel.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: " + tertiary + ";");
     }
 
     private void showAlert(String title, String message) {

@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Weather App",
-  "version": "1.0.0",
-  "description": "Check current weather and a 5-day forecast for any city, right from your toolbar.",
+  "version": "1.1.0",
+  "description": "Check current weather, a 5-day forecast, an analog clock, and the local time for any city, right from your toolbar.",
   "action": {
     "default_popup": "popup.html",
     "default_title": "Weather App"

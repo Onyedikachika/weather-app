@@ -61,7 +61,7 @@ jobs:
             --main-jar weather-app-1.0.jar \
             --main-class weatherapp.WeatherApp \
             --name "Weather App" \
-            --app-version 1.0.0 \
+            --app-version 1.1.0 \
             --vendor "Chika N.O." \
             --dest installer-output
 

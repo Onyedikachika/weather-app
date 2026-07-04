@@ -1,0 +1,71 @@
+name: Build Installers
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            profile: mac
+            jpackage-type: dmg
+          - os: windows-latest
+            profile: windows
+            jpackage-type: msi
+          - os: ubuntu-latest
+            profile: linux
+            jpackage-type: deb
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+
+      - name: Install WiX Toolset (Windows)
+        if: runner.os == 'Windows'
+        run: choco install wixtoolset -y
+
+      - name: Install fakeroot (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fakeroot
+
+      - name: Build jar and collect runtime dependencies
+        run: mvn -B -P${{ matrix.profile }} clean package
+
+      - name: Assemble jpackage input directory
+        shell: bash
+        run: |
+          mkdir -p target/dist
+          cp target/weather-app-1.0.jar target/dist/
+          cp -r target/dependency target/dist/dependency
+
+      - name: Build installer with jpackage
+        shell: bash
+        run: |
+          jpackage \
+            --type ${{ matrix.jpackage-type }} \
+            --input target/dist \
+            --main-jar weather-app-1.0.jar \
+            --main-class weatherapp.WeatherApp \
+            --name "Weather App" \
+            --app-version 1.0.0 \
+            --vendor "Chika N.O." \
+            --dest installer-output
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: weather-app-${{ matrix.os }}
+          path: installer-output/*

@@ -1,0 +1,158 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  width: 320px;
+  font-family: "Segoe UI", "Arial", sans-serif;
+  background: linear-gradient(to bottom, #1e90ff, #87ceeb);
+}
+
+#root {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.search-box {
+  display: flex;
+  gap: 6px;
+  width: 100%;
+}
+
+#location-input {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  padding: 7px 10px;
+  border-radius: 14px;
+  border: 1px solid #cccccc;
+  background: rgba(255, 255, 255, 0.95);
+}
+
+#location-input:focus {
+  outline: none;
+  border-color: #4caf50;
+}
+
+#search-btn {
+  font-size: 13px;
+  font-weight: bold;
+  padding: 7px 14px;
+  border-radius: 14px;
+  border: none;
+  background: #4caf50;
+  color: white;
+  cursor: pointer;
+}
+
+#search-btn:hover {
+  background: #45a049;
+}
+
+.error-banner {
+  width: 100%;
+  background: #f44336;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 6px 10px;
+  border-radius: 6px;
+  margin: 0;
+  text-align: center;
+}
+
+.error-banner.hidden {
+  display: none;
+}
+
+.current-weather {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.main-weather {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.weather-icon {
+  width: 60px;
+  height: 60px;
+}
+
+.temp-desc {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.temperature {
+  font-size: 32px;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.description {
+  font-size: 13px;
+  color: #34495e;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 20px;
+  font-size: 12px;
+  color: #34495e;
+  text-align: center;
+}
+
+.forecast-section {
+  width: 100%;
+}
+
+.forecast-container {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  width: 100%;
+  justify-content: center;
+}
+
+.forecast-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px;
+  min-width: 52px;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.forecast-day .day-name {
+  font-weight: bold;
+  font-size: 11px;
+}
+
+.forecast-day img {
+  width: 32px;
+  height: 32px;
+}
+
+.forecast-day .day-temp {
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.forecast-day .day-desc {
+  font-size: 9px;
+  color: #555;
+}

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Weather App</title>
+<link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div id="root">
+    <div class="search-box">
+      <input id="location-input" type="text" placeholder="City or lat,lon" />
+      <button id="search-btn">Get</button>
+    </div>
+    <p id="error-banner" class="error-banner hidden"></p>
+
+    <section class="current-weather">
+      <div class="main-weather">
+        <img id="weather-icon" class="weather-icon" alt="" />
+        <div class="temp-desc">
+          <div id="temperature" class="temperature">--°C</div>
+          <div id="description" class="description">Select a location</div>
+        </div>
+      </div>
+      <div class="details-grid">
+        <span id="feels-like">Feels like: --°C</span>
+        <span id="humidity">Humidity: --%</span>
+        <span id="wind-speed">Wind: -- km/h</span>
+        <span id="pressure">Pressure: -- hPa</span>
+      </div>
+    </section>
+
+    <section class="forecast-section">
+      <div id="forecast-container" class="forecast-container"></div>
+    </section>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

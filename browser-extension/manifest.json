@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Weather App",
+  "version": "1.0.0",
+  "description": "Check current weather and a 5-day forecast for any city, right from your toolbar.",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Weather App"
+  },
+  "host_permissions": [
+    "https://api.openweathermap.org/*",
+    "https://openweathermap.org/*"
+  ]
+}

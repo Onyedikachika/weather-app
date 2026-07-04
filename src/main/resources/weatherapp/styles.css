@@ -1,0 +1,165 @@
+/* Weather App Stylesheet */
+
+.root {
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+/* Search Section Styling */
+.text-field {
+    -fx-padding: 10px;
+    -fx-font-size: 14px;
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 1px;
+    -fx-background-color: rgba(255, 255, 255, 0.9);
+}
+
+.text-field:focused {
+    -fx-border-color: #4CAF50;
+    -fx-border-width: 2px;
+}
+
+/* Button Styling */
+.button {
+    -fx-padding: 10px 20px;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+    -fx-background-color: linear-gradient(to bottom, #4CAF50, #45a049);
+    -fx-text-fill: white;
+    -fx-border-color: transparent;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient(to bottom, #45a049, #3d8b40);
+}
+
+.button:pressed {
+    -fx-background-color: linear-gradient(to bottom, #3d8b40, #357a38);
+}
+
+/* Toggle Button Styling */
+.toggle-button {
+    -fx-padding: 8px 15px;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-border-radius: 15px;
+    -fx-background-radius: 15px;
+    -fx-background-color: #2196F3;
+    -fx-text-fill: white;
+    -fx-border-color: transparent;
+}
+
+.toggle-button:selected {
+    -fx-background-color: #1976D2;
+}
+
+/* Weather Display Labels */
+.temperature-label {
+    -fx-text-fill: #333333;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 3, 0, 1, 1);
+}
+
+.weather-label {
+    -fx-text-fill: #555555;
+    -fx-font-size: 14px;
+}
+
+/* Forecast Section */
+.forecast-container {
+    -fx-background-color: rgba(255, 255, 255, 0.8);
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 2);
+}
+
+.forecast-day {
+    -fx-padding: 10px;
+    -fx-spacing: 5px;
+    -fx-alignment: center;
+    -fx-background-color: rgba(255, 255, 255, 0.6);
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+}
+
+.forecast-day:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.8);
+}
+
+/* History Section */
+.list-view {
+    -fx-background-color: rgba(255, 255, 255, 0.9);
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 3, 0, 0, 1);
+}
+
+.list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #333333;
+    -fx-font-size: 12px;
+    -fx-padding: 5px 10px;
+}
+
+.list-cell:selected {
+    -fx-background-color: #E3F2FD;
+    -fx-text-fill: #1976D2;
+}
+
+.list-cell:hover {
+    -fx-background-color: #F5F5F5;
+}
+
+/* ScrollPane Styling */
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Weather Icon Container */
+.weather-icon-container {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2);
+}
+
+/* Error Styling */
+.alert {
+    -fx-background-color: white;
+}
+
+.alert .header-panel {
+    -fx-background-color: #f44336;
+}
+
+.alert .header-panel .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+/* Loading Animation */
+.progress-indicator {
+    -fx-accent: #4CAF50;
+}
+
+/* Custom styling for different weather conditions */
+.sunny-background {
+    -fx-background-color: linear-gradient(to bottom, #FFD700, #FFA500);
+}
+
+.cloudy-background {
+    -fx-background-color: linear-gradient(to bottom, #B0C4DE, #778899);
+}
+
+.rainy-background {
+    -fx-background-color: linear-gradient(to bottom, #4682B4, #2F4F4F);
+}
+
+.snowy-background {
+    -fx-background-color: linear-gradient(to bottom, #F0F8FF, #E6E6FA);
+}

@@ -1,0 +1,208 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", "Arial", sans-serif;
+  min-height: 100vh;
+  transition: background 0.6s ease;
+}
+
+#root {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+}
+
+h1 {
+  font-size: 28px;
+  font-weight: bold;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.search-box {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+#location-input {
+  width: 300px;
+  max-width: 60vw;
+  font-size: 14px;
+  padding: 10px;
+  border-radius: 20px;
+  border: 1px solid #cccccc;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+#location-input:focus {
+  outline: none;
+  border-color: #4caf50;
+  border-width: 2px;
+}
+
+#search-btn {
+  font-size: 14px;
+  font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: none;
+  background: linear-gradient(to bottom, #4caf50, #45a049);
+  color: white;
+  cursor: pointer;
+}
+
+#search-btn:hover {
+  background: linear-gradient(to bottom, #45a049, #3d8b40);
+}
+
+#search-btn:active {
+  background: linear-gradient(to bottom, #3d8b40, #357a38);
+}
+
+.error-banner {
+  background: #f44336;
+  color: white;
+  font-weight: bold;
+  padding: 8px 16px;
+  border-radius: 8px;
+  margin: 0;
+}
+
+.error-banner.hidden {
+  display: none;
+}
+
+.current-weather {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.main-weather {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.weather-icon {
+  width: 100px;
+  height: 100px;
+}
+
+.temp-desc {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.temperature {
+  font-size: 48px;
+  font-weight: bold;
+  color: #2c3e50;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.description {
+  font-size: 18px;
+  color: #7f8c8d;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 30px;
+  font-size: 14px;
+  color: #34495e;
+  text-align: center;
+}
+
+.forecast-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.forecast-section h2 {
+  font-size: 20px;
+  font-weight: bold;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.forecast-container {
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+  width: 100%;
+  justify-content: center;
+  padding-bottom: 8px;
+}
+
+.forecast-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 10px;
+  min-width: 90px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.forecast-day .day-name {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.forecast-day img {
+  width: 50px;
+  height: 50px;
+}
+
+.forecast-day .day-temp {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.forecast-day .day-desc {
+  font-size: 12px;
+  color: #7f8c8d;
+}
+
+/* Time-of-day backgrounds, mirrors the desktop app's updateBackgroundBasedOnTime() */
+body.time-morning {
+  background: linear-gradient(to bottom, #87ceeb, #e0f6ff);
+}
+
+body.time-afternoon {
+  background: linear-gradient(to bottom, #1e90ff, #87ceeb);
+}
+
+body.time-evening {
+  background: linear-gradient(to bottom, #ff7f50, #ffb6c1);
+}
+
+body.time-night {
+  background: linear-gradient(to bottom, #191970, #4169e1);
+}

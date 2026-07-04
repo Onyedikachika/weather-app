@@ -6,7 +6,7 @@ body {
   margin: 0;
   width: 320px;
   font-family: "Segoe UI", "Arial", sans-serif;
-  background: linear-gradient(to bottom, #1e90ff, #87ceeb);
+  background: skyblue;
 }
 
 #root {

@@ -70,8 +70,7 @@ public class WeatherApp extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        // Set dynamic background based on time
-        updateBackgroundBasedOnTime();
+        applyBackground();
     }
 
     private void createHeaderSection() {
@@ -406,26 +405,8 @@ public class WeatherApp extends Application {
         }
     }
 
-    private void updateBackgroundBasedOnTime() {
-        LocalDateTime now = LocalDateTime.now();
-        int hour = now.getHour();
-
-        String backgroundStyle;
-        if (hour >= 6 && hour < 12) {
-            // Morning - light blue gradient
-            backgroundStyle = "-fx-background-color: linear-gradient(to bottom, #87CEEB, #E0F6FF);";
-        } else if (hour >= 12 && hour < 17) {
-            // Afternoon - bright blue gradient
-            backgroundStyle = "-fx-background-color: linear-gradient(to bottom, #1E90FF, #87CEEB);";
-        } else if (hour >= 17 && hour < 20) {
-            // Evening - orange/pink gradient
-            backgroundStyle = "-fx-background-color: linear-gradient(to bottom, #FF7F50, #FFB6C1);";
-        } else {
-            // Night - dark blue gradient
-            backgroundStyle = "-fx-background-color: linear-gradient(to bottom, #191970, #4169E1);";
-        }
-
-        root.setStyle(backgroundStyle);
+    private void applyBackground() {
+        root.setStyle("-fx-background-color: skyblue;");
     }
 
     private void showAlert(String title, String message) {

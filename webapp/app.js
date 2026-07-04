@@ -124,24 +124,7 @@ function createForecastItem(day, temp, description, iconCode) {
   return item;
 }
 
-function updateBackgroundBasedOnTime() {
-  const hour = new Date().getHours();
-  document.body.classList.remove("time-morning", "time-afternoon", "time-evening", "time-night");
-
-  if (hour >= 6 && hour < 12) {
-    document.body.classList.add("time-morning");
-  } else if (hour >= 12 && hour < 17) {
-    document.body.classList.add("time-afternoon");
-  } else if (hour >= 17 && hour < 20) {
-    document.body.classList.add("time-evening");
-  } else {
-    document.body.classList.add("time-night");
-  }
-}
-
 searchBtn.addEventListener("click", fetchWeatherData);
 locationInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter") fetchWeatherData();
 });
-
-updateBackgroundBasedOnTime();

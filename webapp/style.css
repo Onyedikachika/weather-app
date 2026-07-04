@@ -6,7 +6,7 @@ body {
   margin: 0;
   font-family: "Segoe UI", "Arial", sans-serif;
   min-height: 100vh;
-  transition: background 0.6s ease;
+  background: skyblue;
 }
 
 #root {
@@ -188,21 +188,4 @@ h1 {
 .forecast-day .day-desc {
   font-size: 12px;
   color: #7f8c8d;
-}
-
-/* Time-of-day backgrounds, mirrors the desktop app's updateBackgroundBasedOnTime() */
-body.time-morning {
-  background: linear-gradient(to bottom, #87ceeb, #e0f6ff);
-}
-
-body.time-afternoon {
-  background: linear-gradient(to bottom, #1e90ff, #87ceeb);
-}
-
-body.time-evening {
-  background: linear-gradient(to bottom, #ff7f50, #ffb6c1);
-}
-
-body.time-night {
-  background: linear-gradient(to bottom, #191970, #4169e1);
 }

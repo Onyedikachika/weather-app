@@ -280,3 +280,18 @@ body[class^="bg-night"] .clock-label,
 body[class^="bg-night"] .forecast-section h2 {
   color: #f0f4f8;
 }
+
+.app-footer {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 12px;
+  color: #34495e;
+}
+
+.app-footer p {
+  margin: 2px 0;
+}
+
+body[class^="bg-night"] .app-footer {
+  color: #dfe6ec;
+}

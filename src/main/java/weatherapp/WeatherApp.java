@@ -54,6 +54,7 @@ public class WeatherApp extends Application {
     private ImageView weatherIcon;
     private HBox forecastContainer;
     private Label forecastTitleLabel;
+    private Label footerLabel;
     private VBox root;
 
     private Canvas deviceClockCanvas;
@@ -75,6 +76,7 @@ public class WeatherApp extends Application {
         createClockSection();
         createCurrentWeatherSection();
         createForecastSection();
+        createFooterSection();
 
         Scene scene = new Scene(root, 800, 600);
 
@@ -218,6 +220,18 @@ public class WeatherApp extends Application {
         forecastSection.getChildren().addAll(forecastTitleLabel, forecastScroll);
 
         root.getChildren().add(forecastSection);
+    }
+
+    private void createFooterSection() {
+        footerLabel = new Label("Developed by Onyedika Chika Nwankwo\nAll rights reserved, 2026.");
+        footerLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #34495e; -fx-text-alignment: center;");
+        footerLabel.setAlignment(Pos.CENTER);
+
+        VBox footerBox = new VBox();
+        footerBox.setAlignment(Pos.CENTER);
+        footerBox.getChildren().add(footerLabel);
+
+        root.getChildren().add(footerBox);
     }
 
     private void fetchWeatherData() {
@@ -584,6 +598,7 @@ public class WeatherApp extends Application {
 
         forecastTitleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: " + primary + ";");
         clockLabel.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: " + tertiary + ";");
+        footerLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: " + tertiary + "; -fx-text-alignment: center;");
     }
 
     private void showAlert(String title, String message) {

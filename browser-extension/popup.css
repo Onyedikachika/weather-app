@@ -230,3 +230,18 @@ body[class^="bg-night"] .description,
 body[class^="bg-night"] .details-grid {
   color: #f0f4f8;
 }
+
+.app-footer {
+  margin-top: 6px;
+  text-align: center;
+  font-size: 9px;
+  color: #34495e;
+}
+
+.app-footer p {
+  margin: 1px 0;
+}
+
+body[class^="bg-night"] .app-footer {
+  color: #dfe6ec;
+}

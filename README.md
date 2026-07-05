@@ -78,12 +78,3 @@ npm run open:ios        # opens the Xcode project (requires full Xcode, not just
 ## A note on the API key
 
 The OpenWeatherMap key is hardcoded in the source (`WeatherApp.java`, `webapp/app.js`, `browser-extension/popup.js`, and therefore `mobile/www/app.js` too, since that's a copy of `webapp/app.js`) and this repo is public, so the key is public too. It's a free-tier key with no billing exposure, but see [issue #1](https://github.com/Onyedikachika/weather-app/issues/1) before relying on this in anything beyond a personal/class project.
-
-## Acknowledgements
-
-Built from a Programming Unit 8 assignment, referencing:
-
-- Chua, E. H. (n.d.). *Java Programming Tutorial: Programming Graphical User Interface (GUI)*. Nanyang Technological University.
-- Eck, D. J. (2022). *Introduction to Programming Using Java, version 9, JavaFX edition*. Licensed under CC 4.0.
-- Morelli, R. & Wade, R. (n.d.). *Java, Java, Java - Object-Oriented Programming*. LibreTexts Engineering. Licensed under CC 4.0.
-- M.G.A. (2022, November 20). *Java GUI programming: An overview for beginners*. Entri Blog.

@@ -25,13 +25,28 @@ npm run build:android
 
 Install it on a connected device/emulator with `adb install -r android/app/build/outputs/apk/debug/app-debug.apk`.
 
-For a signed release build (Play Store), you'll need to generate a keystore and configure
-signing in `android/app/build.gradle` — not set up yet.
+Build a signed release APK (installable outside of Android Studio, e.g. via direct download):
+
+```bash
+cd android && JAVA_HOME=/usr/local/opt/openjdk@21 ANDROID_HOME=/usr/local/share/android-commandlinetools ./gradlew assembleRelease
+# output: android/app/build/outputs/apk/release/app-release.apk
+```
+
+Signing config lives in `android/app/build.gradle`, reading credentials from
+`android/app/keystore.properties` (git-ignored, not committed — ask whoever holds it if you
+need to produce another signed build, or generate a new keystore/properties pair yourself with
+`keytool -genkeypair` and point `keystore.properties` at it). This is a self-signed key for
+direct/sideload distribution, not a Play Store upload key.
+
+This isn't a Play Store submission — just a signed, installable APK for direct distribution
+(GitHub release, sideloading, etc.).
 
 ## iOS
 
 Scaffolded (`ios/App/App.xcodeproj`) but **not built** — this machine only has the Xcode
-Command Line Tools, not full Xcode, and Xcode can't be installed non-interactively.
+Command Line Tools, not full Xcode, and Xcode can't be installed non-interactively. Producing
+an actual `.ipa` requires both full Xcode and an Apple ID/Developer account for code signing —
+neither can be done headlessly from this environment.
 
 To build:
 
@@ -39,8 +54,9 @@ To build:
 2. `npm run sync-web` (or just `npx cap open ios`, which does this first)
 3. In Xcode: pick a simulator or your device, set a Signing Team under
    App target → Signing & Capabilities (a free Apple ID works for simulator/local device
-   runs; a paid Apple Developer account is required to distribute via TestFlight/App Store)
-4. Cmd+R to build and run
+   runs; a paid Apple Developer account is required to distribute via TestFlight/App Store or
+   to export an ad-hoc `.ipa` for sideloading)
+4. Cmd+R to build and run, or Product → Archive → Distribute App to export an `.ipa`
 
 ## App identity
 

@@ -1,0 +1,21 @@
+{
+  "name": "mobile",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "sync-web": "rm -rf www && mkdir -p www && cp ../webapp/index.html ../webapp/style.css ../webapp/app.js www/ && npx cap sync",
+    "build:android": "npm run sync-web && cd android && ./gradlew assembleDebug",
+    "open:ios": "npm run sync-web && npx cap open ios"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@capacitor/android": "^8.4.1",
+    "@capacitor/cli": "^8.4.1",
+    "@capacitor/core": "^8.4.1",
+    "@capacitor/ios": "^8.4.1"
+  }
+}

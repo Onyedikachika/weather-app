@@ -1,6 +1,6 @@
 # Weather App
 
-Current weather and a 5-day forecast for any city or lat/lon coordinate pair, via the [OpenWeatherMap API](https://openweathermap.org/api). Built four ways from the same design: a JavaFX desktop app, a static web app, a browser extension, and native installers for macOS/Windows/Linux.
+Current weather and a 5-day forecast for any city or lat/lon coordinate pair, via the [OpenWeatherMap API](https://openweathermap.org/api). Built several ways from the same design: a JavaFX desktop app, a static web app, a browser extension, native installers for macOS/Windows/Linux, and Android/iOS mobile apps.
 
 **Live web app**: https://peppy-vacherin-18f5c3.netlify.app
 **Downloads (installers + extension)**: https://github.com/Onyedikachika/weather-app/releases/tag/v1.1.0
@@ -13,6 +13,7 @@ Current weather and a 5-day forecast for any city or lat/lon coordinate pair, vi
 | Web app | [`webapp/`](webapp/) | Static HTML/CSS/JS, calls the API directly from the browser |
 | Browser extension | [`browser-extension/`](browser-extension/) | Manifest V3 popup, same API logic as the web app |
 | Installers | [`.github/workflows/build-installers.yml`](.github/workflows/build-installers.yml) | GitHub Actions matrix build using `jpackage` for `.dmg`/`.msi`/`.deb` |
+| Mobile apps | [`mobile/`](mobile/) | Capacitor wrapper around the web app; native Android and iOS projects |
 
 ## Features
 
@@ -61,9 +62,22 @@ jpackage --type dmg --input target/dist --main-jar weather-app-1.0.jar \
 
 (swap `--type dmg` for `msi`/`deb` to match the active profile)
 
+## Building the mobile apps
+
+`mobile/` wraps the web app with [Capacitor](https://capacitorjs.com) so it runs as a native
+Android/iOS app instead of in a browser. See [`mobile/README.md`](mobile/README.md) for full
+prerequisites and instructions; short version:
+
+```bash
+cd mobile
+npm install
+npm run build:android   # -> android/app/build/outputs/apk/debug/app-debug.apk
+npm run open:ios        # opens the Xcode project (requires full Xcode, not just the CLI tools)
+```
+
 ## A note on the API key
 
-The OpenWeatherMap key is hardcoded in the source (`WeatherApp.java`, `webapp/app.js`, `browser-extension/popup.js`) and this repo is public, so the key is public too. It's a free-tier key with no billing exposure, but see [issue #1](https://github.com/Onyedikachika/weather-app/issues/1) before relying on this in anything beyond a personal/class project.
+The OpenWeatherMap key is hardcoded in the source (`WeatherApp.java`, `webapp/app.js`, `browser-extension/popup.js`, and therefore `mobile/www/app.js` too, since that's a copy of `webapp/app.js`) and this repo is public, so the key is public too. It's a free-tier key with no billing exposure, but see [issue #1](https://github.com/Onyedikachika/weather-app/issues/1) before relying on this in anything beyond a personal/class project.
 
 ## Acknowledgements
 

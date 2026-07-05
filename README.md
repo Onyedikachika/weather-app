@@ -3,7 +3,8 @@
 Current weather and a 5-day forecast for any city or lat/lon coordinate pair, via the [OpenWeatherMap API](https://openweathermap.org/api). Built several ways from the same design: a JavaFX desktop app, a static web app, a browser extension, native installers for macOS/Windows/Linux, and Android/iOS mobile apps.
 
 **Live web app**: https://peppy-vacherin-18f5c3.netlify.app
-**Downloads (installers + extension)**: https://github.com/Onyedikachika/weather-app/releases/tag/v1.1.0
+**Downloads (desktop installers + browser extension)**: https://github.com/Onyedikachika/weather-app/releases/tag/v1.1.0
+**Downloads (Android app)**: https://github.com/Onyedikachika/weather-app/releases/tag/v1.2.0
 
 ## What's here
 

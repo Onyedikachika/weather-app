@@ -19,7 +19,9 @@ Current weather and a 5-day forecast for any city or lat/lon coordinate pair, vi
 - Search by city name (`London`) or coordinates (`40.7128,-74.0060`)
 - Current temperature, feels-like, humidity, wind speed, pressure, and condition icon
 - 5-day forecast strip
-- Desktop app's background gradient shifts with the time of day
+- 12-hour analog clock synced to your device, plus the searched city's timezone-aware local time
+- Weather/day-night backgrounds that reflect the searched city's real condition and time of day
+- Developer/copyright footer across the desktop app, web app, and browser extension
 
 Unit conversion and search history are described in the original assignment write-up but aren't implemented yet — tracked in [issues #2](https://github.com/Onyedikachika/weather-app/issues/2) and [#3](https://github.com/Onyedikachika/weather-app/issues/3).
 
